@@ -1,47 +1,47 @@
-# Mzansi Eats: My Responsiveness Audit & Fixes Report
+# Mzansi Eats: Responsiveness Audit & Fixes Report
 
-Hey! For this assignment, I went through the Mzansi Eats landing page to test how it handles different screen sizes. I used the device toolbar in Chrome DevTools to audit the layout at three specific breakpoints: **375px (Mobile)**, **768px (Tablet)**, and **1280px (Desktop)**.
+This report reviews the Mzansi Eats landing page across mobile, tablet, and desktop breakpoints. I used Chrome DevTools device emulation to inspect the layout at **375px (Mobile)**, **768px (Tablet)**, and **1280px (Desktop)**.
 
-Seeing the site on smaller viewports was a massive eye-opener. The layout completely broke down on mobile and tablet—elements were crashing into each other, content was getting clipped, and an ugly horizontal scrollbar appeared. I wanted to make sure our users get a smooth, painless experience whether they are ordering on their phones or checking us out from a desktop.
+The page had noticeable responsiveness issues on smaller screens. Elements overlapped, content was clipped, and horizontal scrolling appeared. The goal was to make the page more usable and visually consistent on phones, tablets, and desktops.
 
-Below is my structured report detailing the issues I caught, how I tackled them, and the specific CSS changes I applied.
+Below is a structured summary of the issues found, how they were resolved, and the CSS updates applied.
 
 ---
 
 ## 1. High-Level Summary of Layout Adjustments
 
-| Section Evaluated       | The Issue on Small Screens                                                                                 | My Responsive Fix                                                                                                   |
-| :---------------------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
-| **Header Navigation**   | The logo and nav links crammed into each other on mobile, looking super cluttered.                         | Stacked them vertically on mobile so the layout can breathe, then let them spread back out on desktop.              |
-| **Hero Image Banner**   | It was locked at a wide `1200px`, which pushed the viewport out and forced horizontal scrolling.           | Changed it to `width: 100%` and `height: auto` so it scales and fluidly shrinks on smaller screens.                 |
-| **Popular Dishes Grid** | The grid was stuck showing 4 items side-by-side (`repeat(4, 250px)`), hiding most of the cards off-screen. | Set it to a single column on phones, 2 columns on tablets, and 4 columns on large monitors.                         |
-| **Contact Wrapper**     | The inner container was hardcoded to `800px`, making it bleed past the screen boundaries on mobile.        | Changed it to a flexible `100%` width but kept a `max-width: 800px` boundary so it doesn't over-stretch on desktop. |
-| **Contact Form Grid**   | The input fields and the address text were squished side-by-side into two tiny, unreadable columns.        | Made them stack vertically on mobile so users actually have space to type into the form fields.                     |
+| Section Evaluated       | Issue on Smaller Screens                                                                                 | Responsive Fix                                                                                                       |
+| :---------------------- | :------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| **Header Navigation**   | The logo and navigation links were too close together on mobile, creating a crowded appearance.          | Stacked the header items vertically on mobile, then restored the desktop layout at larger widths.                    |
+| **Hero Image Banner**   | The hero image used a fixed `1200px` width, which caused horizontal scrolling on narrower viewports.      | Updated it to `width: 100%` and `height: auto` so it scales fluidly across screens.                                  |
+| **Popular Dishes Grid** | The grid forced four cards side-by-side (`repeat(4, 250px)`), hiding most content on smaller screens.     | Switched to one column on phones, two columns on tablets, and four columns on desktop.                               |
+| **Contact Wrapper**     | The inner container was fixed at `800px`, causing overflow on mobile and tablet.                         | Set the wrapper to `width: 100%` with `max-width: 800px` so it scales down on small screens but stays centered on desktop. |
+| **Contact Form Grid**   | The form and address details were squeezed into two narrow columns on mobile, reducing readability.      | Changed the layout to stack vertically on mobile so fields and contact text are easier to read and use.             |
 
 ---
 
-## 2. Detailed Breakdown of the 4 Main Issues & Fixes
+## 2. Detailed Breakdown of the Main Issues & Fixes
 
 ### Issue 1: Hero Image Overflow (Horizontal Scrolling)
 
 - **Breakpoints Affected:** Mobile (375px) & Tablet (768px)
-- **What was wrong:** The top banner picture had a strict, fixed width of `1200px`. Because it couldn't adapt or shrink, it pushed the whole layout out of whack and forced a really annoying horizontal scrollbar on smaller viewports.
-- **The Fix:** I removed that rigid width value from the CSS. Now it uses `width: 100%` so it fills the screen container beautifully, and I added a `min-height: 250px` so it doesn't look too flat or squished on phone screens.
+- **Problem:** The hero image had a fixed width of `1200px`, which prevented it from resizing on smaller screens and led to horizontal scrolling.
+- **Fix:** Removed the fixed width and used `width: 100%`, allowing the image to adapt to the available viewport. Added `min-height: 250px` to preserve the banner's visual balance on smaller devices.
 
-#### My Testing Screenshots
+#### Testing Screenshots
 
 - **Before Fix (Mobile 375px):** ![Mobile before fix](Screenshot mobile before.png)
 - **After Fix (Mobile 375px):** ![Mobile after fix](screenshot mobile after.png)
 
 ---
 
-### Issue 2: Broken Menu Card Grid Layout
+### Issue 2: Menu Card Grid Layout
 
 - **Breakpoints Affected:** Mobile (375px) & Tablet (768px)
-- **What was wrong:** The menu section used a rigid grid setup: `grid-template-columns: repeat(4, 250px);`. This requires at least 1000px of screen space. On a phone, users could only see the very first card, and the other three delicious dishes were completely hidden off the edge of the screen.
-- **The Fix:** I updated the default layout to a single vertical column (`1fr`) for mobile so users can just scroll down naturally. Then, I used media queries to bump it up to 2 columns on tablets and back to a clean 4-column layout on large desktop monitors.
+- **Problem:** The menu grid used `grid-template-columns: repeat(4, 250px);`, which requires at least 1000px of width. On phones, only the first card was visible and the remaining cards were hidden off-screen.
+- **Fix:** Used a single-column layout by default for mobile, then applied media queries to switch to two columns on tablets and four columns on desktop.
 
-#### My Testing Screenshots
+#### Testing Screenshots
 
 - **Before Fix (Tablet 768px):** ![Tablet before fix](screenshot tablet before.png)
 - **After Fix (Tablet 768px):** ![Tablet after fix](screenshot tablet after.png)
@@ -51,23 +51,23 @@ Below is my structured report detailing the issues I caught, how I tackled them,
 ### Issue 3: Contact Form and Details Overlapping
 
 - **Breakpoints Affected:** Mobile (375px)
-- **What was wrong:** The contact section split the screen into two equal halves using `grid-template-columns: 1fr 1fr;`. On a narrow phone screen, dividing that tiny space in half made the form inputs and contact text completely crammed and impossible to read or interact with comfortably.
-- **The Fix:** I changed the default layout to a single column (`1fr`). Now the form sits neatly on top of the address details on mobile, and it automatically snaps back into a side-by-side layout when the viewport hits tablet size and up.
+- **Problem:** The contact section used `grid-template-columns: 1fr 1fr;`, which cramped the form and address details on a narrow screen.
+- **Fix:** Switched to a single-column layout on mobile so the form is displayed above the contact details. The layout returns to side-by-side at tablet and desktop widths.
 
-#### My Testing Screenshots
+#### Testing Screenshots
 
 - **Before Fix (Mobile 375px):** ![Contact form before fix](Screenshot mobile before.png)
-- **After Fix (Mobile 375px):** ![Contact form after fix](screenshot mobile after.png)
+- **After Fix (Mobile 375px):** ![Contact form after fix](screenshot mobile after fix.png)
 
 ---
 
 ### Issue 4: Rigid Contact Inner Container
 
 - **Breakpoints Affected:** Mobile (375px) & Tablet (768px)
-- **What was wrong:** The `.contact-inner` wrapper was locked down with a firm `width: 800px;` property. Just like the hero image, this completely stopped the content from adapting or shrinking on any device narrower than 800px, breaking the page alignment.
-- **The Fix:** I changed the style to `width: 100%` so the section scales down smoothly on mobile screens. I also added a `max-width: 800px` limit so it stops expanding on massive desktop setups and retains its original clean, centered look.
+- **Problem:** The `.contact-inner` wrapper was set to `width: 800px;`, causing overflow and breaking the layout on narrower screens.
+- **Fix:** Changed the wrapper to `width: 100%` with `max-width: 800px`. This allows the section to scale on mobile while preserving the desktop layout on larger screens.
 
-#### My Testing Screenshots
+#### Testing Screenshots
 
 - **Before Fix (Tablet 768px):** ![Desktop before fix](screenshot desktop before.png)
-- **After Fix (Tablet 768px):** ![Desktop after fix](screenshot desktop after.png)
+- **After Fix (Tablet 768px):** ![Desktop after fix](screenshot desktop after fix.png)
